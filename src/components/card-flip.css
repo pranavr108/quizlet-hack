@@ -1,0 +1,25 @@
+.card-flip {
+  perspective: 600px;
+  list-style: none;
+}
+
+.card-flip-inner {
+  position: relative;
+  transition: transform 0.4s;
+  transform-style: preserve-3d;
+}
+
+.card-flip:hover .card-flip-inner {
+  transform: rotateY(180deg);
+}
+
+.card-flip-inner > [data-face="front"],
+.card-flip-inner > [data-face="back"] {
+  backface-visibility: hidden;
+}
+
+.card-flip-inner > [data-face="back"] {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+}
