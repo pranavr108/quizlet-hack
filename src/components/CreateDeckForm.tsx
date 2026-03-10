@@ -8,10 +8,16 @@ type CreateDeckFormProps = {
 
 export const CreateDeckForm = ({ onSubmit }: CreateDeckFormProps) => {
   const [name, setName] = useState('')
+  const [error, setError] = useState('')
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    onSubmit({ name })
+    if (name.trim().length === 0) {
+      setError('Name is required')
+      return
+    }
+    setError('')
+    onSubmit({ name: name.trim() })
   }
 
   return (
@@ -23,6 +29,7 @@ export const CreateDeckForm = ({ onSubmit }: CreateDeckFormProps) => {
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
+      {error && <p role="alert">{error}</p>}
       <button type="submit">Create</button>
     </form>
   )

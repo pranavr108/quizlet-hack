@@ -13,6 +13,27 @@ describe('Create deck form', () => {
     expect(screen.getByRole('button', { name: /create/i })).toBeInTheDocument()
   })
 
+  it('does not call onSubmit when name is empty', async () => {
+    const onSubmit = vi.fn()
+    const user = userEvent.setup()
+
+    render(<CreateDeckForm onSubmit={onSubmit} />)
+
+    await user.click(screen.getByRole('button', { name: /create/i }))
+
+    expect(onSubmit).not.toHaveBeenCalled()
+  })
+
+  it('shows validation error when submitting empty name', async () => {
+    const user = userEvent.setup()
+
+    render(<CreateDeckForm onSubmit={vi.fn()} />)
+
+    await user.click(screen.getByRole('button', { name: /create/i }))
+
+    expect(screen.getByText(/name is required/i)).toBeInTheDocument()
+  })
+
   it('calls onSubmit with deck name when form is submitted', async () => {
     const onSubmit = vi.fn()
     const user = userEvent.setup()

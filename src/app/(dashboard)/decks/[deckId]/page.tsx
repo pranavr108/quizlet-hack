@@ -22,12 +22,18 @@ export default function DeckDetailPage() {
   const { deckId } = useParams<{ deckId: string }>()
   const [cards, setCards] = useState<ReadonlyArray<Card>>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string>()
 
   const loadCards = () => {
-    getCardsByDeck(supabase, deckId).then(data => {
-      setCards(data)
-      setLoading(false)
-    })
+    getCardsByDeck(supabase, deckId)
+      .then(data => {
+        setCards(data)
+        setLoading(false)
+      })
+      .catch(() => {
+        setError('Failed to load cards')
+        setLoading(false)
+      })
   }
 
   useEffect(() => { loadCards() }, [deckId])
@@ -38,6 +44,7 @@ export default function DeckDetailPage() {
   }
 
   if (loading) return <p>Loading...</p>
+  if (error) return <p role="alert">{error}</p>
 
   return (
     <div>

@@ -13,6 +13,17 @@ describe('Generate flashcards view', () => {
     expect(screen.getByRole('button', { name: /generate/i })).toBeInTheDocument()
   })
 
+  it('does not call onGenerate when text is empty', async () => {
+    const onGenerate = vi.fn()
+    const user = userEvent.setup()
+
+    render(<GenerateView onGenerate={onGenerate} />)
+
+    await user.click(screen.getByRole('button', { name: /generate/i }))
+
+    expect(onGenerate).not.toHaveBeenCalled()
+  })
+
   it('calls onGenerate with the pasted text', async () => {
     const user = userEvent.setup()
     const onGenerate = vi.fn()

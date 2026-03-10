@@ -21,7 +21,8 @@ export const GenerateView = ({ onGenerate, cards, error, loading, toast, extract
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    onGenerate(text)
+    if (text.trim().length === 0) return
+    onGenerate(text.trim())
   }
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {

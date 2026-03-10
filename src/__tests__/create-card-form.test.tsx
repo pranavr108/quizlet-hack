@@ -14,6 +14,41 @@ describe('Create card form', () => {
     expect(screen.getByRole('button', { name: /add card/i })).toBeInTheDocument()
   })
 
+  it('does not call onSubmit when front is empty', async () => {
+    const onSubmit = vi.fn()
+    const user = userEvent.setup()
+
+    render(<CreateCardForm onSubmit={onSubmit} />)
+
+    await user.type(screen.getByLabelText(/back/i), 'Some answer')
+    await user.click(screen.getByRole('button', { name: /add card/i }))
+
+    expect(onSubmit).not.toHaveBeenCalled()
+  })
+
+  it('does not call onSubmit when back is empty', async () => {
+    const onSubmit = vi.fn()
+    const user = userEvent.setup()
+
+    render(<CreateCardForm onSubmit={onSubmit} />)
+
+    await user.type(screen.getByLabelText(/front/i), 'Some question')
+    await user.click(screen.getByRole('button', { name: /add card/i }))
+
+    expect(onSubmit).not.toHaveBeenCalled()
+  })
+
+  it('shows validation error when fields are empty', async () => {
+    const user = userEvent.setup()
+
+    render(<CreateCardForm onSubmit={vi.fn()} />)
+
+    await user.click(screen.getByRole('button', { name: /add card/i }))
+
+    expect(screen.getByText(/front is required/i)).toBeInTheDocument()
+    expect(screen.getByText(/back is required/i)).toBeInTheDocument()
+  })
+
   it('calls onSubmit with front and back text', async () => {
     const user = userEvent.setup()
     const onSubmit = vi.fn()
