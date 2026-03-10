@@ -57,8 +57,13 @@ export default function GeneratePage() {
 
   return (
     <div>
-      <a href={`/decks/${deckId}`}>← Back to deck</a>
-      <h2>Generate Flashcards</h2>
+      <div style={{ marginBottom: '1.5rem' }}>
+        <a href={`/decks/${deckId}`} className="btn btn-ghost">← Back to Deck</a>
+      </div>
+      <div className="page-title-block">
+        <h2>Generate Flashcards</h2>
+        <p>Paste your notes or upload a PDF — Gemini AI will create flashcards for you.</p>
+      </div>
       <GenerateView
         onGenerate={handleGenerate}
         cards={cards}
@@ -67,9 +72,11 @@ export default function GeneratePage() {
         toast={toast}
       />
       {cards && cards.length > 0 && (
-        <button onClick={handleSave} disabled={saving}>
-          {saving ? 'Saving...' : `Save ${cards.length} cards to deck`}
-        </button>
+        <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+          <button className="btn btn-primary" onClick={handleSave} disabled={saving}>
+            {saving ? 'Saving…' : `Save ${cards.length} Cards to Deck`}
+          </button>
+        </div>
       )}
     </div>
   )

@@ -19,19 +19,19 @@ describe('Card list view', () => {
     expect(screen.getByText('Deoxyribonucleic acid')).toBeInTheDocument()
   })
 
-  it('renders each card with distinct front and back faces for flip', () => {
+  it('renders each card with distinct front and back sections', () => {
     const cards = [
       { id: '1', deck_id: 'deck-1', front: 'What is ATP?', back: 'Adenosine triphosphate', interval: 1, ease_factor: 2.5, next_review_at: '2026-03-08', created_at: '2026-03-07' },
     ]
 
     render(<CardList cards={cards} />)
 
-    const frontFace = screen.getByText('What is ATP?').closest('[data-face="front"]')
-    const backFace = screen.getByText('Adenosine triphosphate').closest('[data-face="back"]')
+    const frontEl = screen.getByText('What is ATP?').closest('.card-list-item-front')
+    const backEl = screen.getByText('Adenosine triphosphate').closest('.card-list-item-back')
 
-    expect(frontFace).toBeInTheDocument()
-    expect(backFace).toBeInTheDocument()
-    expect(frontFace?.parentElement).toBe(backFace?.parentElement)
+    expect(frontEl).toBeInTheDocument()
+    expect(backEl).toBeInTheDocument()
+    expect(frontEl?.parentElement).toBe(backEl?.parentElement)
   })
 
   it('shows empty state when no cards exist', () => {

@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic'
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { supabase } from '@/lib/db/client'
-import { getCardsByDeck, createCard } from '@/lib/db/cards'
+import { getCardsByDeck, createCard, deleteCard } from '@/lib/db/cards'
 import { CardList } from '@/components/CardList'
 import { CreateCardForm } from '@/components/CreateCardForm'
 
@@ -45,20 +45,34 @@ export default function DeckDetailPage() {
     loadCards()
   }
 
-  if (loading) return <p>Loading...</p>
-  if (error) return <p role="alert">{error}</p>
+  const handleDeleteCard = async (id: string) => {
+    await deleteCard(supabase, id)
+    loadCards()
+  }
+
+  if (loading) return <p className="status-loading">Loading cards…</p>
+  if (error) return <p role="alert" className="form-error">{error}</p>
 
   return (
     <div>
-      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-        <a href="/decks">← Back</a>
-        <h2>Cards</h2>
-        <a href={`/decks/${deckId}/generate`}>Generate Cards</a>
-        <a href={`/study/${deckId}`}>Study</a>
+      <div className="page-actions">
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: '1rem' }}>
+          <a href="/decks" className="btn btn-ghost">← Decks</a>
+          <h2>Cards</h2>
+        </div>
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <a href={`/study/${deckId}`} className="btn btn-secondary">Study</a>
+          <a href={`/decks/${deckId}/generate`} className="btn btn-primary">Generate with AI</a>
+        </div>
       </div>
-      <h3>Add Card</h3>
+
+      <hr className="section-rule" />
+
+      <h3>Add a Card</h3>
       <CreateCardForm onSubmit={handleAddCard} />
-      <CardList cards={cards} />
+
+      <h3>{cards.length} {cards.length === 1 ? 'Card' : 'Cards'}</h3>
+      <CardList cards={cards} onDelete={handleDeleteCard} />
     </div>
   )
 }

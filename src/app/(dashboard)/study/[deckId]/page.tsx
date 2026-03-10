@@ -37,21 +37,25 @@ export default function StudyPage() {
       })
   }, [deckId])
 
-  if (loading) return <p>Loading...</p>
-  if (error) return <p role="alert">{error}</p>
+  if (loading) return <p className="status-loading">Loading study session…</p>
+  if (error) return <p role="alert" className="form-error">{error}</p>
   if (!cards || cards.length === 0) {
     return (
-      <div>
-        <a href={`/decks/${deckId}`}>← Back to deck</a>
-        <p>No cards to study. Add some cards first.</p>
+      <div className="empty-state">
+        <p>No cards to study yet.</p>
+        <a href={`/decks/${deckId}`} className="btn btn-primary">Add Cards</a>
       </div>
     )
   }
 
   return (
     <div>
-      <a href={`/decks/${deckId}`}>← Back to deck</a>
-      <h2>Study Session</h2>
+      <div style={{ marginBottom: '1.5rem' }}>
+        <a href={`/decks/${deckId}`} className="btn btn-ghost">← Back to Deck</a>
+      </div>
+      <div className="page-title-block">
+        <h2>Study Session</h2>
+      </div>
       <StudyView cards={cards} now={new Date()} />
     </div>
   )

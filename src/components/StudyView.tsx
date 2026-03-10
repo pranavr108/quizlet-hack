@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useStudySession } from '@/hooks/useStudySession'
 import { CardContent } from '@/components/CardContent'
-import './study-card-flip.css'
 
 type Card = {
   id: string
@@ -55,27 +54,55 @@ export const StudyView = ({ cards, now }: StudyViewProps) => {
   }, [currentCard, showBack, handleRate, handleFlip])
 
   if (!currentCard) {
-    return <p>Session complete!</p>
+    return (
+      <div className="session-complete">
+        <h3>Session Complete</h3>
+        <p>You've reviewed all due cards. Well done.</p>
+      </div>
+    )
   }
 
   return (
     <div>
       <div className="study-card">
         <div className={`study-card-inner${showBack ? ' study-card-flipped' : ''}`}>
-          <div data-face="front"><CardContent text={currentCard.front} /></div>
-          <div data-face="back"><CardContent text={currentCard.back} /></div>
+          <div data-face="front">
+            <span className="study-card-face-label">Front</span>
+            <div className="study-card-content"><CardContent text={currentCard.front} /></div>
+          </div>
+          <div data-face="back">
+            <span className="study-card-face-label">Back</span>
+            <div className="study-card-content"><CardContent text={currentCard.back} /></div>
+          </div>
         </div>
       </div>
-      {showBack ? (
-        <>
-          <button onClick={() => handleRate(1)}>Again</button>
-          <button onClick={() => handleRate(3)}>Hard</button>
-          <button onClick={() => handleRate(4)}>Good</button>
-          <button onClick={() => handleRate(5)}>Easy</button>
-        </>
-      ) : (
-        <button onClick={handleFlip}>Show Answer</button>
-      )}
+
+      <div className="study-actions">
+        {showBack ? (
+          <>
+            <button className="grade-btn again" onClick={() => handleRate(1)}>
+              Again<span className="grade-key"><kbd>1</kbd></span>
+            </button>
+            <button className="grade-btn" onClick={() => handleRate(3)}>
+              Hard<span className="grade-key"><kbd>2</kbd></span>
+            </button>
+            <button className="grade-btn" onClick={() => handleRate(4)}>
+              Good<span className="grade-key"><kbd>3</kbd></span>
+            </button>
+            <button className="grade-btn easy" onClick={() => handleRate(5)}>
+              Easy<span className="grade-key"><kbd>4</kbd></span>
+            </button>
+          </>
+        ) : (
+          <button className="btn btn-primary" onClick={handleFlip}>
+            Show Answer
+          </button>
+        )}
+      </div>
+
+      <p className="keyboard-hint">
+        Press <kbd>Space</kbd> to flip · <kbd>1</kbd>–<kbd>4</kbd> to grade
+      </p>
     </div>
   )
 }

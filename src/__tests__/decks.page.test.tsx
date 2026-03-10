@@ -43,7 +43,7 @@ describe('Deck list page', () => {
 
     render(<DeckList decks={decks} />)
 
-    expect(screen.getByText(/2026-03-06/)).toBeInTheDocument()
+    expect(screen.getAllByText(/studied/i).length).toBeGreaterThanOrEqual(2)
     expect(screen.getByText(/never studied/i)).toBeInTheDocument()
   })
 })

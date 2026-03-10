@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { CardContent } from '@/components/CardContent'
 
 type GeneratedCard = {
   front: string
@@ -34,34 +35,53 @@ export const GenerateView = ({ onGenerate, cards, error, loading, toast, extract
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="paste-text">Paste text</label>
-        <textarea
-          id="paste-text"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-        />
-        <label htmlFor="upload-pdf">Upload PDF</label>
-        <input
-          id="upload-pdf"
-          type="file"
-          accept=".pdf"
-          onChange={handleFileChange}
-        />
-        <button type="submit" disabled={loading}>Generate</button>
+      <form onSubmit={handleSubmit} className="card" style={{ marginBottom: '1.5rem' }}>
+        <div className="form-group">
+          <label htmlFor="paste-text" className="form-label">Paste your notes</label>
+          <textarea
+            id="paste-text"
+            className="form-textarea"
+            placeholder="Paste lecture notes, textbook passages, or any study material…"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="upload-pdf" className="form-label">Or upload a PDF</label>
+          <input
+            id="upload-pdf"
+            type="file"
+            accept=".pdf"
+            className="form-input"
+            onChange={handleFileChange}
+          />
+        </div>
+        <button type="submit" className="btn btn-primary" disabled={loading}>
+          {loading ? 'Generating…' : 'Generate Flashcards'}
+        </button>
       </form>
-      {loading && <div role="status">Generating flashcards...</div>}
-      {toast && <div role="alert">{toast}</div>}
-      {error && <p>{error}</p>}
-      {cards && (
-        <ul>
-          {cards.map((card, i) => (
-            <li key={i}>
-              <span>{card.front}</span>
-              <span>{card.back}</span>
-            </li>
-          ))}
-        </ul>
+
+      {loading && <div role="status" className="status-loading">Generating flashcards…</div>}
+      {toast && <div role="alert" className="toast">{toast}</div>}
+      {error && <p className="form-error" style={{ marginTop: '1rem' }}>{error}</p>}
+
+      {cards && cards.length > 0 && (
+        <>
+          <hr className="section-rule" />
+          <h3>Generated Cards</h3>
+          <ul className="card-list">
+            {cards.map((card, i) => (
+              <li key={i} className="card-list-item">
+                <div className="card-list-item-front">
+                  <CardContent text={card.front} />
+                </div>
+                <div className="card-list-item-back">
+                  <CardContent text={card.back} />
+                </div>
+              </li>
+            ))}
+          </ul>
+        </>
       )}
     </div>
   )

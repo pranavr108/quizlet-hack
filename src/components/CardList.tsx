@@ -1,4 +1,4 @@
-import './card-flip.css'
+import { CardContent } from '@/components/CardContent'
 
 type Card = {
   id: string
@@ -13,21 +13,37 @@ type Card = {
 
 type CardListProps = {
   cards: ReadonlyArray<Card>
+  onDelete?: (id: string) => void
 }
 
-export const CardList = ({ cards }: CardListProps) => {
+export const CardList = ({ cards, onDelete }: CardListProps) => {
   if (cards.length === 0) {
-    return <p>No cards yet.</p>
+    return (
+      <div className="empty-state">
+        <p>No cards yet — add one above or generate with AI.</p>
+      </div>
+    )
   }
 
   return (
-    <ul>
+    <ul className="card-list">
       {cards.map(card => (
-        <li key={card.id} className="card-flip">
-          <div className="card-flip-inner">
-            <div data-face="front">{card.front}</div>
-            <div data-face="back">{card.back}</div>
+        <li key={card.id} className="card-list-item">
+          <div className="card-list-item-front">
+            <CardContent text={card.front} />
           </div>
+          <div className="card-list-item-back">
+            <CardContent text={card.back} />
+          </div>
+          {onDelete && (
+            <button
+              className="btn btn-ghost"
+              onClick={() => onDelete(card.id)}
+              style={{ justifySelf: 'end' }}
+            >
+              Delete
+            </button>
+          )}
         </li>
       ))}
     </ul>

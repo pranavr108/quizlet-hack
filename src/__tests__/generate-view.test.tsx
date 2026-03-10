@@ -9,7 +9,7 @@ describe('Generate flashcards view', () => {
   it('renders a text input and generate button', () => {
     render(<GenerateView onGenerate={vi.fn()} />)
 
-    expect(screen.getByLabelText(/paste text/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/paste your notes/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /generate/i })).toBeInTheDocument()
   })
 
@@ -30,7 +30,7 @@ describe('Generate flashcards view', () => {
 
     render(<GenerateView onGenerate={onGenerate} />)
 
-    await user.type(screen.getByLabelText(/paste text/i), 'ATP is adenosine triphosphate.')
+    await user.type(screen.getByLabelText(/paste your notes/i), 'ATP is adenosine triphosphate.')
     await user.click(screen.getByRole('button', { name: /generate/i }))
 
     expect(onGenerate).toHaveBeenCalledWith('ATP is adenosine triphosphate.')
@@ -58,7 +58,7 @@ describe('Generate flashcards view', () => {
   it('renders a file input that accepts PDF', () => {
     render(<GenerateView onGenerate={vi.fn()} />)
 
-    const fileInput = screen.getByLabelText(/upload pdf/i)
+    const fileInput = screen.getByLabelText(/upload a pdf/i)
     expect(fileInput).toBeInTheDocument()
     expect(fileInput).toHaveAttribute('accept', '.pdf')
   })
@@ -67,7 +67,7 @@ describe('Generate flashcards view', () => {
     render(<GenerateView onGenerate={vi.fn()} loading={true} />)
 
     expect(screen.getByRole('status')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /generate/i })).toBeDisabled()
+    expect(screen.getByRole('button', { name: /generating/i })).toBeDisabled()
   })
 
   it('shows success toast when cards are generated', () => {
@@ -87,7 +87,7 @@ describe('Generate flashcards view', () => {
     render(<GenerateView onGenerate={vi.fn()} extractText={extractText} />)
 
     const file = new File(['fake pdf'], 'notes.pdf', { type: 'application/pdf' })
-    await user.upload(screen.getByLabelText(/upload pdf/i), file)
+    await user.upload(screen.getByLabelText(/upload a pdf/i), file)
 
     expect(extractText).toHaveBeenCalledWith(file)
     expect(await screen.findByDisplayValue('Extracted PDF content here.')).toBeInTheDocument()

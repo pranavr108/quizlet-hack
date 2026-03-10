@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Flashcard App',
@@ -8,11 +9,14 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body style={{ fontFamily: 'system-ui, sans-serif', maxWidth: 800, margin: '0 auto', padding: '1rem' }}>
-        <header>
-          <h1><a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>Flashcard App</a></h1>
-        </header>
-        <main>{children}</main>
+      <body>
+        <div className="container">
+          <header className="page-header">
+            <h1><a href="/">Flashcard App</a></h1>
+            <a href="/decks">Decks</a>
+          </header>
+          <main>{children}</main>
+        </div>
       </body>
     </html>
   )

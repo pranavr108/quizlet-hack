@@ -32,13 +32,13 @@ export default function DecksPage() {
     loadDecks()
   }
 
-  if (loading) return <p>Loading...</p>
+  if (loading) return <p className="status-loading">Loading decks…</p>
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div className="page-actions">
         <h2>Your Decks</h2>
-        <a href="/decks/new">+ New Deck</a>
+        <a href="/decks/new" className="btn btn-primary">+ New Deck</a>
       </div>
       <DeckList decks={decks} onDelete={handleDelete} />
     </div>

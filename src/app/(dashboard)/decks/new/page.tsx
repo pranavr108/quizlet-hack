@@ -17,7 +17,12 @@ export default function NewDeckPage() {
 
   return (
     <div>
-      <h2>Create New Deck</h2>
+      <div style={{ marginBottom: '1.5rem' }}>
+        <a href="/decks" className="btn btn-ghost">← Back to Decks</a>
+      </div>
+      <div className="page-title-block">
+        <h2>Create New Deck</h2>
+      </div>
       <CreateDeckForm onSubmit={handleSubmit} />
     </div>
   )

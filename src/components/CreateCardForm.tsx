@@ -30,18 +30,32 @@ export const CreateCardForm = ({ onSubmit }: CreateCardFormProps) => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="card-front">Front</label>
-        <input id="card-front" type="text" value={front} onChange={(e) => setFront(e.target.value)} />
-        {errors.front && <p role="alert">{errors.front}</p>}
+    <form onSubmit={handleSubmit} className="card" style={{ marginBottom: '1.5rem' }}>
+      <div className="form-group">
+        <label htmlFor="card-front" className="form-label">Front</label>
+        <input
+          id="card-front"
+          type="text"
+          className="form-input"
+          placeholder="Question or term…"
+          value={front}
+          onChange={(e) => setFront(e.target.value)}
+        />
+        {errors.front && <p role="alert" className="form-error">{errors.front}</p>}
       </div>
-      <div>
-        <label htmlFor="card-back">Back</label>
-        <input id="card-back" type="text" value={back} onChange={(e) => setBack(e.target.value)} />
-        {errors.back && <p role="alert">{errors.back}</p>}
+      <div className="form-group">
+        <label htmlFor="card-back" className="form-label">Back</label>
+        <input
+          id="card-back"
+          type="text"
+          className="form-input"
+          placeholder="Answer or definition…"
+          value={back}
+          onChange={(e) => setBack(e.target.value)}
+        />
+        {errors.back && <p role="alert" className="form-error">{errors.back}</p>}
       </div>
-      <button type="submit">Add Card</button>
+      <button type="submit" className="btn btn-primary">Add Card</button>
     </form>
   )
 }
