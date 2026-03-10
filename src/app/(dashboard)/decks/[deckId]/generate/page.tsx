@@ -2,10 +2,8 @@
 
 import { useState } from 'react'
 import { useParams } from 'next/navigation'
-import { GoogleGenerativeAI } from '@google/generative-ai'
 import { supabase } from '@/lib/db/client'
 import { createCard } from '@/lib/db/cards'
-import { generateFlashcards } from '@/lib/utils/gemini'
 import { GenerateView } from '@/components/GenerateView'
 
 type GeneratedCard = { front: string; back: string }
@@ -14,27 +12,35 @@ export default function GeneratePage() {
   const { deckId } = useParams<{ deckId: string }>()
   const [cards, setCards] = useState<ReadonlyArray<GeneratedCard>>()
   const [error, setError] = useState<string>()
+  const [loading, setLoading] = useState(false)
+  const [toast, setToast] = useState<string>()
   const [saving, setSaving] = useState(false)
 
   const handleGenerate = async (text: string) => {
     setError(undefined)
     setCards(undefined)
+    setToast(undefined)
+    setLoading(true)
 
-    const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY
-    if (!apiKey) {
-      setError('NEXT_PUBLIC_GEMINI_API_KEY is not set')
-      return
-    }
+    try {
+      const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text }),
+      })
 
-    const genAI = new GoogleGenerativeAI(apiKey)
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' })
+      const result = await response.json()
 
-    const result = await generateFlashcards({ text, model })
-
-    if (result.success) {
-      setCards(result.cards)
-    } else {
-      setError(result.error)
+      if (result.success) {
+        setCards(result.cards)
+        setToast(`Successfully generated ${result.cards.length} card${result.cards.length === 1 ? '' : 's'}`)
+      } else {
+        setError(result.error)
+      }
+    } catch {
+      setError('Failed to connect to server')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -51,7 +57,13 @@ export default function GeneratePage() {
     <div>
       <a href={`/decks/${deckId}`}>← Back to deck</a>
       <h2>Generate Flashcards</h2>
-      <GenerateView onGenerate={handleGenerate} cards={cards} error={error} />
+      <GenerateView
+        onGenerate={handleGenerate}
+        cards={cards}
+        error={error}
+        loading={loading}
+        toast={toast}
+      />
       {cards && cards.length > 0 && (
         <button onClick={handleSave} disabled={saving}>
           {saving ? 'Saving...' : `Save ${cards.length} cards to deck`}

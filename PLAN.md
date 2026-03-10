@@ -186,9 +186,9 @@ SUPABASE_SERVICE_ROLE_KEY=
 > **Goal**: Deploy the application to production securely, ensuring database migrations sync correctly and environment variables are protected.
 > **Claude: Ensure strict typing is maintained in the CI/CD pipeline and no production secrets are committed.**
 
-- [ ] Create a production project in the Supabase Dashboard.
-- [ ] Link your local Supabase instance to the remote project using `supabase link --project-ref <YOUR-PROJECT-ID>`.
-- [ ] Push local database migrations to the production database using `supabase db push`.
+- [x] Create a production project in the Supabase Dashboard.
+- [x] Link your local Supabase instance to the remote project using `supabase link --project-ref <YOUR-PROJECT-ID>`.
+- [x] Push local database migrations to the production database using `supabase db push`.
 - [ ] Configure Supabase Authentication (optional, if transitioning from single-user local) to ensure Row Level Security (RLS) protects the cloud database.
 - [ ] Create a Vercel project and link it to your GitHub repository.
 - [ ] Add all required Production Environment Variables directly in the Vercel Dashboard before the first deployment:
