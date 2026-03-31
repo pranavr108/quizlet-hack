@@ -313,10 +313,11 @@ a:hover { color: var(--accent-hover); text-decoration: underline; }
   border-radius: var(--radius);
   padding: 2.5rem 2rem;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   box-shadow: var(--shadow);
   min-height: 260px;
+  max-height: 60vh;
   overflow-y: auto;
 }
 
