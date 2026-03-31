@@ -1,10 +1,7 @@
 import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist'
 
 if (typeof window !== 'undefined') {
-  GlobalWorkerOptions.workerSrc = new URL(
-    'pdfjs-dist/build/pdf.worker.min.mjs',
-    import.meta.url,
-  ).toString()
+  GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@5.6.205/build/pdf.worker.min.mjs`
 }
 
 export const extractTextFromPdf = async (file: File): Promise<string> => {
