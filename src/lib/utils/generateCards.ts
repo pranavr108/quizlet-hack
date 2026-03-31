@@ -13,10 +13,10 @@ type ParseResult = ParseSuccess | ParseFailure
 
 const extractJson = (raw: string): string => {
   const fenced = raw.match(/```(?:json)?\s*\n?([\s\S]*?)\n?\s*```/)
-  if (fenced) return fenced[1].trim()
+  if (fenced?.[1]) return fenced[1].trim()
 
   const bracketMatch = raw.match(/\[[\s\S]*\]/)
-  if (bracketMatch) return bracketMatch[0]
+  if (bracketMatch?.[0]) return bracketMatch[0]
 
   return raw.trim()
 }
