@@ -298,7 +298,6 @@ a:hover { color: var(--accent-hover); text-decoration: underline; }
 
 .study-card-inner {
   position: relative;
-  min-height: 260px;
   transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
 }
@@ -307,8 +306,6 @@ a:hover { color: var(--accent-hover); text-decoration: underline; }
 
 .study-card-inner [data-face="front"],
 .study-card-inner [data-face="back"] {
-  position: absolute;
-  inset: 0;
   backface-visibility: hidden;
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -319,9 +316,15 @@ a:hover { color: var(--accent-hover); text-decoration: underline; }
   align-items: center;
   justify-content: center;
   box-shadow: var(--shadow);
+  min-height: 260px;
+  overflow-y: auto;
 }
 
-.study-card-inner [data-face="back"] { transform: rotateY(180deg); }
+.study-card-inner [data-face="back"] {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+}
 
 .study-card-face-label {
   position: absolute;
