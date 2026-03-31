@@ -7,6 +7,7 @@ import { useParams } from 'next/navigation'
 import { supabase } from '@/lib/db/client'
 import { createCard } from '@/lib/db/cards'
 import { GenerateView } from '@/components/GenerateView'
+import { extractTextFromPdf } from '@/lib/utils/extractPdf'
 
 type GeneratedCard = { front: string; back: string }
 
@@ -18,7 +19,7 @@ export default function GeneratePage() {
   const [toast, setToast] = useState<string>()
   const [saving, setSaving] = useState(false)
 
-  const handleGenerate = async (text: string) => {
+  const handleGenerate = async (text: string, mode: 'general' | 'academic') => {
     setError(undefined)
     setCards(undefined)
     setToast(undefined)
@@ -28,7 +29,7 @@ export default function GeneratePage() {
       const response = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify({ text, mode }),
       })
 
       const result = await response.json()
@@ -70,6 +71,7 @@ export default function GeneratePage() {
         error={error}
         loading={loading}
         toast={toast}
+        extractText={extractTextFromPdf}
       />
       {cards && cards.length > 0 && (
         <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>

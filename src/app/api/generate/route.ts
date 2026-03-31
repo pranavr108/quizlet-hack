@@ -13,6 +13,7 @@ export async function POST(request: Request) {
 
   const body = await request.json()
   const text = body?.text
+  const mode = body?.mode === 'academic' ? 'academic' as const : 'general' as const
 
   if (!text || typeof text !== 'string' || text.trim().length === 0) {
     return NextResponse.json(
@@ -24,7 +25,7 @@ export async function POST(request: Request) {
   const genAI = new GoogleGenerativeAI(apiKey)
   const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
 
-  const result = await generateFlashcards({ text, model })
+  const result = await generateFlashcards({ text, model, mode })
 
   if (result.success) {
     return NextResponse.json({ success: true, cards: result.cards })

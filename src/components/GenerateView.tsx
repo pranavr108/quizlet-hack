@@ -8,8 +8,10 @@ type GeneratedCard = {
   back: string
 }
 
+type GenerateMode = 'general' | 'academic'
+
 type GenerateViewProps = {
-  readonly onGenerate: (text: string) => void
+  readonly onGenerate: (text: string, mode: GenerateMode) => void
   readonly cards?: ReadonlyArray<GeneratedCard>
   readonly error?: string
   readonly loading?: boolean
@@ -19,11 +21,12 @@ type GenerateViewProps = {
 
 export const GenerateView = ({ onGenerate, cards, error, loading, toast, extractText }: GenerateViewProps) => {
   const [text, setText] = useState('')
+  const [mode, setMode] = useState<GenerateMode>('general')
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (text.trim().length === 0) return
-    onGenerate(text.trim())
+    onGenerate(text.trim(), mode)
   }
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,6 +34,7 @@ export const GenerateView = ({ onGenerate, cards, error, loading, toast, extract
     if (!file || !extractText) return
     const extracted = await extractText(file)
     setText(extracted)
+    setMode('academic')
   }
 
   return (
@@ -56,6 +60,31 @@ export const GenerateView = ({ onGenerate, cards, error, loading, toast, extract
             onChange={handleFileChange}
           />
         </div>
+        <fieldset className="form-group">
+          <legend className="form-label">Generation mode</legend>
+          <label style={{ marginRight: '1.5rem', cursor: 'pointer' }}>
+            <input
+              type="radio"
+              name="mode"
+              value="general"
+              checked={mode === 'general'}
+              onChange={() => setMode('general')}
+              style={{ marginRight: '0.4rem' }}
+            />
+            General notes
+          </label>
+          <label style={{ cursor: 'pointer' }}>
+            <input
+              type="radio"
+              name="mode"
+              value="academic"
+              checked={mode === 'academic'}
+              onChange={() => setMode('academic')}
+              style={{ marginRight: '0.4rem' }}
+            />
+            Academic paper
+          </label>
+        </fieldset>
         <button type="submit" className="btn btn-primary" disabled={loading}>
           {loading ? 'Generating…' : 'Generate Flashcards'}
         </button>

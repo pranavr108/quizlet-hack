@@ -33,7 +33,7 @@ describe('Generate flashcards view', () => {
     await user.type(screen.getByLabelText(/paste your notes/i), 'ATP is adenosine triphosphate.')
     await user.click(screen.getByRole('button', { name: /generate/i }))
 
-    expect(onGenerate).toHaveBeenCalledWith('ATP is adenosine triphosphate.')
+    expect(onGenerate).toHaveBeenCalledWith('ATP is adenosine triphosphate.', 'general')
   })
 
   it('displays generated cards when provided', () => {
