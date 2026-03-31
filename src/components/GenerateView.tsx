@@ -22,6 +22,8 @@ type GenerateViewProps = {
 export const GenerateView = ({ onGenerate, cards, error, loading, toast, extractText }: GenerateViewProps) => {
   const [text, setText] = useState('')
   const [mode, setMode] = useState<GenerateMode>('general')
+  const [extracting, setExtracting] = useState(false)
+  const [extractError, setExtractError] = useState<string>()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -32,9 +34,17 @@ export const GenerateView = ({ onGenerate, cards, error, loading, toast, extract
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file || !extractText) return
-    const extracted = await extractText(file)
-    setText(extracted)
-    setMode('academic')
+    setExtracting(true)
+    setExtractError(undefined)
+    try {
+      const extracted = await extractText(file)
+      setText(extracted)
+      setMode('academic')
+    } catch {
+      setExtractError('Failed to extract text from PDF. Make sure the file is a valid PDF.')
+    } finally {
+      setExtracting(false)
+    }
   }
 
   return (
@@ -59,6 +69,8 @@ export const GenerateView = ({ onGenerate, cards, error, loading, toast, extract
             className="form-input"
             onChange={handleFileChange}
           />
+          {extracting && <p className="status-loading" style={{ marginTop: '0.5rem' }}>Extracting text from PDF…</p>}
+          {extractError && <p className="form-error" style={{ marginTop: '0.5rem' }}>{extractError}</p>}
         </div>
         <fieldset className="form-group">
           <legend className="form-label">Generation mode</legend>
