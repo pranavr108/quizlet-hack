@@ -36,6 +36,40 @@ describe('AI flashcard generator', () => {
     expect(result.success).toBe(false)
   })
 
+  it('parses response wrapped in markdown code fences', () => {
+    const geminiResponse = '```json\n[{"front":"What is ATP?","back":"Adenosine triphosphate"}]\n```'
+
+    const result = parseGeneratedCards(geminiResponse)
+
+    expect(result.success).toBe(true)
+    if (result.success) {
+      expect(result.cards).toHaveLength(1)
+      expect(result.cards[0].front).toBe('What is ATP?')
+    }
+  })
+
+  it('parses response with extra text before and after JSON', () => {
+    const geminiResponse = 'Here are your flashcards:\n[{"front":"What is ATP?","back":"Adenosine triphosphate"}]\nHope this helps!'
+
+    const result = parseGeneratedCards(geminiResponse)
+
+    expect(result.success).toBe(true)
+    if (result.success) {
+      expect(result.cards).toHaveLength(1)
+    }
+  })
+
+  it('parses response wrapped in code fences without json tag', () => {
+    const geminiResponse = '```\n[{"front":"What is ATP?","back":"Adenosine triphosphate"}]\n```'
+
+    const result = parseGeneratedCards(geminiResponse)
+
+    expect(result.success).toBe(true)
+    if (result.success) {
+      expect(result.cards).toHaveLength(1)
+    }
+  })
+
   it('rejects response with empty front text', () => {
     const geminiResponse = JSON.stringify([
       { front: '', back: 'Adenosine triphosphate' },

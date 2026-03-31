@@ -11,10 +11,20 @@ type ParseSuccess = { success: true; cards: ReadonlyArray<GeneratedCard> }
 type ParseFailure = { success: false; error: string }
 type ParseResult = ParseSuccess | ParseFailure
 
+const extractJson = (raw: string): string => {
+  const fenced = raw.match(/```(?:json)?\s*\n?([\s\S]*?)\n?\s*```/)
+  if (fenced) return fenced[1].trim()
+
+  const bracketMatch = raw.match(/\[[\s\S]*\]/)
+  if (bracketMatch) return bracketMatch[0]
+
+  return raw.trim()
+}
+
 export const parseGeneratedCards = (raw: string): ParseResult => {
   let parsed: unknown
   try {
-    parsed = JSON.parse(raw)
+    parsed = JSON.parse(extractJson(raw))
   } catch {
     return { success: false, error: 'Invalid JSON' }
   }
